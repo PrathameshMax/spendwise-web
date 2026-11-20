@@ -1,0 +1,40 @@
+name: release
+
+# Production release ("Release Preparation" -> "Create CR & Release Note" ->
+# "Deploy to PROD"). Stages live in PrathameshMax/spendwise-ci (release.yml).
+#
+# Before running: raise a Change Request issue in spendwise-platform naming this
+# service and the commit uat holds, and get it labelled "approved". Then run
+# this workflow from main with the CR number.
+
+on:
+  workflow_dispatch:
+    inputs:
+      change-request:
+        description: Change Request issue number in spendwise-platform
+        type: string
+        required: true
+      bump:
+        description: Version part to increase
+        type: choice
+        options: [patch, minor, major]
+        default: patch
+
+permissions: {}
+
+concurrency:
+  group: release-${{ github.repository }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    uses: PrathameshMax/spendwise-ci/.github/workflows/release.yml@v1
+    permissions:
+      contents: write
+      packages: write
+    with:
+      image-name: spendwise-web
+      change-request: ${{ inputs.change-request }}
+      bump: ${{ inputs.bump }}
+    secrets:
+      CHANGE_MGMT_TOKEN: ${{ secrets.CHANGE_MGMT_TOKEN }}

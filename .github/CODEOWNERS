@@ -1,0 +1,5 @@
+# Every change needs an approving review from a code owner (enforced by the
+# main-branch ruleset). Pipeline and dependency-update configuration is owned
+# separately so a CI change is never approved as an incidental part of a feature.
+*                    @PrathameshMax
+/.github/            @PrathameshMax

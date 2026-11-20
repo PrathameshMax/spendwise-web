@@ -1,0 +1,13 @@
+apiVersion: v2
+name: web
+description: "SpendWise web — React web app served by unprivileged nginx"
+type: application
+# Base version. The pipeline packages every main build as
+# <version>-g<short commit> with the image digest written into values.yaml.
+version: 1.0.0
+appVersion: "main"
+home: https://github.com/PrathameshMax/spendwise-web
+sources:
+  - https://github.com/PrathameshMax/spendwise-web
+maintainers:
+  - name: PrathameshMax

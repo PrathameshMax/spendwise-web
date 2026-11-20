@@ -1,0 +1,22 @@
+{{- if .Values.service.create }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "svc.fullname" . }}
+  labels:
+    {{- include "svc.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  selector:
+    {{- include "svc.selectorLabels" . | nindent 4 }}
+  ports:
+    {{- range .Values.containerPorts }}
+    - name: {{ .name }}
+      port: {{ .containerPort }}
+      targetPort: {{ .name }}
+      protocol: TCP
+      {{- if eq .name "grpc" }}
+      appProtocol: grpc
+      {{- end }}
+    {{- end }}
+{{- end }}

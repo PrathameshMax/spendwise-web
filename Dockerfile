@@ -12,7 +12,7 @@ ENV VITE_GATEWAY_URL=${VITE_GATEWAY_URL} \
 RUN npm run build
 
 # Non-root nginx (uid 101), listens on 8080.
-FROM nginxinc/nginx-unprivileged:1.27-alpine
+FROM nginxinc/nginx-unprivileged:1.31-alpine
 COPY --chown=101:101 nginx/default.conf.template /etc/nginx/templates/default.conf.template
 COPY --from=build --chown=101:101 /app/dist /usr/share/nginx/html
 ENV GATEWAY_URL=http://localhost:8080 \

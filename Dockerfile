@@ -13,6 +13,13 @@ RUN npm run build
 
 # Non-root nginx (uid 101), listens on 8080.
 FROM nginxinc/nginx-unprivileged:1.31-alpine
+# Base images trail Alpine's security fixes by days or weeks: take them at build
+# time so every image carries today's patched packages. curl is removed because
+# nothing uses it (the healthcheck uses busybox wget), which takes curl and
+# libcurl out of the attack surface instead of patching them forever.
+USER root
+RUN apk upgrade --no-cache && apk del --no-cache curl
+USER 101
 COPY --chown=101:101 nginx/default.conf.template /etc/nginx/templates/default.conf.template
 COPY --from=build --chown=101:101 /app/dist /usr/share/nginx/html
 ENV GATEWAY_URL=http://localhost:8080 \
